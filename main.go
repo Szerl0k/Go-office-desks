@@ -18,11 +18,27 @@ type Desk struct {
 	Body     string `json:"body"`
 }
 
+var (
+	port   string
+	tDesks string
+	tUsers string
+)
+
+func init() {
+
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	port = os.Getenv("PORT")
+	tDesks = os.Getenv("tDesks")
+	tUsers = os.Getenv("tUsers")
+
+}
+
 func main() {
-
-	loadEnv()
-
-	port := os.Getenv("PORT")
 
 	db := connectToDb()
 	defer db.Close()
@@ -74,14 +90,6 @@ func main() {
 
 }
 
-func loadEnv() {
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-}
-
 func connectToDb() *sql.DB {
 	MysqlUri := os.Getenv("MYSQL_URI")
 
@@ -105,7 +113,7 @@ func fetchAllDesks(db *sql.DB) []Desk {
 
 	var desks []Desk
 
-	rows, err := db.Query("SELECT * FROM Desk")
+	rows, err := db.Query("SELECT * FROM " + tDesks)
 
 	if err != nil {
 		log.Fatalf("Error querying the database: %v", err)
@@ -132,7 +140,7 @@ func fetchDesk(id string, db *sql.DB) (Desk, error) {
 
 	desk := Desk{}
 
-	query := "UPDATE Desk SET occupied = ? WHERE id = ?"
+	query := "UPDATE " + tDesks + " SET occupied = ? WHERE id = ?"
 
 	result, err := db.Exec(query, true, id)
 
@@ -144,7 +152,7 @@ func fetchDesk(id string, db *sql.DB) (Desk, error) {
 		return desk, errors.New("desk is already occupied or does not exist")
 	}
 
-	query = "SELECT * FROM Desk WHERE Id = ?"
+	query = "SELECT * FROM " + tDesks + " WHERE Id = ?"
 
 	rows, err := db.Query(query, id)
 

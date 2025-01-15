@@ -15,27 +15,28 @@ SELECT * FROM Users;
 -- tables
 -- Table: Desks
 CREATE TABLE Desks (
-                       Id int NOT NULL,
-                       Occupied bool  NOT NULL,
-                       Body varchar(50)  NOT NULL,
-                       CONSTRAINT Desks_pk PRIMARY KEY (Id)
+    Id int NOT NULL AUTO_INCREMENT,
+    Floor int NOT NULL,
+    Occupied bool  NOT NULL,
+    Body varchar(50)  NOT NULL,
+    CONSTRAINT Desks_pk PRIMARY KEY (Id)
 );
 
 -- Table: Reservations
 CREATE TABLE Reservations (
-                              User_Id int  NOT NULL,
-                              Desk_Id int  NOT NULL,
-                              `From` date  NOT NULL,
-                              `To` int  NOT NULL,
-                              CONSTRAINT Reservations_pk PRIMARY KEY (User_Id,Desk_Id)
+    User_Id int  NOT NULL,
+    Desk_Id int  NOT NULL,
+    `From` date  NOT NULL,
+    `To` int  NOT NULL,
+    CONSTRAINT Reservations_pk PRIMARY KEY (User_Id,Desk_Id)
 );
 
 -- Table: Users
 CREATE TABLE Users (
-                       Id INT AUTO_INCREMENT NOT NULL,
-                       Name varchar(40)  NOT NULL,
-                       Surname varchar(40)  NOT NULL,
-                       CONSTRAINT Users_pk PRIMARY KEY (Id)
+    Id INT NOT NULL AUTO_INCREMENT,
+    Name varchar(40)  NOT NULL,
+    Surname varchar(40)  NOT NULL,
+    CONSTRAINT Users_pk PRIMARY KEY (Id)
 );
 
 -- foreign keys

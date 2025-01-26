@@ -8,6 +8,7 @@ import (
 func PrivateRoutes(a *fiber.App) {
 	route := a.Group("/api/v1")
 
-	route.Patch("/desks/:id", controllers.BookDesk)  // Book desks
-	route.Post("/desks/add", controllers.CreateDesk) // Add desks
+	route.Patch("/desks/:id", controllers.BookDesk)         // Book desk
+	route.Post("/desks/add", controllers.CreateDesk)        // Create desk
+	route.Post("/desks/remove/:id", controllers.DeleteDesk) // Remove desks
 }

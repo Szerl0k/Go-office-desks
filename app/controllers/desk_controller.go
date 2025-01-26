@@ -8,6 +8,7 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"strconv"
 )
 
 var (
@@ -117,7 +118,7 @@ func BookDesk(c *fiber.Ctx) error {
 		return errorResponse(c, err)
 	}
 
-	return c.Status(409).JSON(fiber.Map{
+	return c.Status(200).JSON(fiber.Map{
 		"error": false,
 		"msg":   "successfully booked a desk",
 		"desks": desk,
@@ -158,6 +159,38 @@ func CreateDesk(c *fiber.Ctx) error {
 		"error": false,
 		"msg":   nil,
 		"desk":  desk,
+	})
+
+}
+
+func DeleteDesk(c *fiber.Ctx) error {
+	db, err := database.MySQLConnection()
+
+	if err != nil {
+		return errorResponse(c, err)
+	}
+
+	id := c.Params("id")
+
+	query := "DELETE FROM " + tDesks + " WHERE Id = ?"
+
+	result, err := db.Exec(query, id)
+
+	if err != nil {
+		log.Printf("error deleting desk")
+		return errorResponse(c, err)
+	}
+
+	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
+		return errorResponse(c, errors.New("desk does not exist"))
+	}
+
+	iid, _ := strconv.Atoi(id)
+
+	return c.Status(200).JSON(fiber.Map{
+		"error": false,
+		"msg":   "successfully removed a desk",
+		"id":    iid,
 	})
 
 }

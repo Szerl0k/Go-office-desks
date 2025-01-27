@@ -115,7 +115,10 @@ func GetUser(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	userEmail := claims["user_email"].(float64)
+
+	log.Println("Tutaj")
+
+	userEmail := claims["user_email"].(string)
 
 	db, err := database.MySQLConnection()
 

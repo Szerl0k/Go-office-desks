@@ -12,9 +12,9 @@ import (
 )
 
 var (
-	_             = godotenv.Load(".env") // For some reason without this the os.Gatenv() will assign no values
-	tDesks        = os.Getenv("tDesks")
-	tUsers string = os.Getenv("tUsers")
+	_            = godotenv.Load(".env") // For some reason without this the os.Gatenv() will assign no values
+	tDesk        = os.Getenv("tDesk")
+	tUser string = os.Getenv("tUser")
 )
 
 func errorResponse(c *fiber.Ctx, err error) error {
@@ -35,7 +35,7 @@ func FetchAllDesks(c *fiber.Ctx) error {
 
 	var desks []structs.Desk
 
-	rows, err := db.Query("SELECT * FROM " + tDesks + "")
+	rows, err := db.Query("SELECT * FROM " + tDesk + "")
 
 	defer rows.Close()
 
@@ -89,7 +89,7 @@ func BookDesk(c *fiber.Ctx) error {
 	id := c.Params("id")
 	desk := structs.Desk{}
 
-	query := "UPDATE " + tDesks + " SET occupied = ? WHERE id = ?"
+	query := "UPDATE " + tDesk + " SET occupied = ? WHERE id = ?"
 
 	result, err := db.Exec(query, true, id)
 
@@ -102,7 +102,7 @@ func BookDesk(c *fiber.Ctx) error {
 		return errorResponse(c, errors.New("desk already occupied or does not exist"))
 	}
 
-	query = "SELECT * FROM " + tDesks + " WHERE Id = ?"
+	query = "SELECT * FROM " + tDesk + " WHERE Id = ?"
 
 	rows, err := db.Query(query, id)
 
@@ -114,7 +114,7 @@ func BookDesk(c *fiber.Ctx) error {
 	rows.Next()
 
 	if err := rows.Scan(&desk.ID, &desk.Floor, &desk.Occupied, &desk.Body); err != nil {
-		log.Printf("error scanning row")
+		log.Printf("error scanning desk row")
 		return errorResponse(c, err)
 	}
 
@@ -143,7 +143,7 @@ func CreateDesk(c *fiber.Ctx) error {
 		return errorResponse(c, errors.New("desk floor and body is required"))
 	}
 
-	query := "INSERT INTO " + tDesks + " (Floor, Occupied, Body) VALUES (?,?,?)"
+	query := "INSERT INTO " + tDesk + " (Floor, Occupied, Body) VALUES (?,?,?)"
 
 	result, err := db.Exec(query, &desk.Floor, false, &desk.Body)
 
@@ -172,7 +172,7 @@ func DeleteDesk(c *fiber.Ctx) error {
 
 	id := c.Params("id")
 
-	query := "DELETE FROM " + tDesks + " WHERE Id = ?"
+	query := "DELETE FROM " + tDesk + " WHERE Id = ?"
 
 	result, err := db.Exec(query, id)
 

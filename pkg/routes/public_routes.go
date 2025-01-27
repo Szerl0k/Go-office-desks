@@ -10,4 +10,6 @@ func PublicRoutes(a *fiber.App) {
 
 	route.Get("/desks/", controllers.FetchAllDesks) // get desks
 
+	route.Post("/login", controllers.Login)
+
 }

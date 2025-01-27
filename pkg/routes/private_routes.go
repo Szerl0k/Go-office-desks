@@ -11,4 +11,8 @@ func PrivateRoutes(a *fiber.App) {
 	route.Patch("/desks/:id", controllers.BookDesk)         // Book desk
 	route.Post("/desks/add", controllers.CreateDesk)        // Create desk
 	route.Post("/desks/remove/:id", controllers.DeleteDesk) // Remove desks
+
+	route.Post("/user", controllers.GetUser)
+	route.Post("/register", controllers.CreateUser)
+
 }

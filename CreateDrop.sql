@@ -1,73 +1,78 @@
-UPDATE Desks SET Occupied = false WHERE true;
+UPDATE Desk SET Occupied = false WHERE true;
 
-SELECT * FROM Desks;
+INSERT INTO User (Email, Name, Surname, Password) VALUES ('test@gmail.com', 'imie', 'nazwisko', 'aabb');
 
-SELECT * FROM Reservations;
+SELECT * FROM Desk;
 
-SELECT * FROM Users;
+SELECT * FROM Reservation;
+
+SELECT * FROM User;
 
 
 -- CREATE
 
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2025-01-14 14:30:24.806
+-- Last modification date: 2025-01-27 14:57:53.06
 
 -- tables
--- Table: Desks
-CREATE TABLE Desks (
-    Id int NOT NULL AUTO_INCREMENT,
-    Floor int NOT NULL,
+-- Table: Desk
+CREATE TABLE Desk (
+    Id int  NOT NULL,
+    Floor int  NOT NULL,
     Occupied bool  NOT NULL,
     Body varchar(50)  NOT NULL,
-    CONSTRAINT Desks_pk PRIMARY KEY (Id)
+    CONSTRAINT Desk_pk PRIMARY KEY (Id)
 );
 
--- Table: Reservations
-CREATE TABLE Reservations (
-    User_Id int  NOT NULL,
-    Desk_Id int  NOT NULL,
+-- Table: Reservation
+CREATE TABLE Reservation (
+    Id int  NOT NULL,
     `From` date  NOT NULL,
-    `To` int  NOT NULL,
-    CONSTRAINT Reservations_pk PRIMARY KEY (User_Id,Desk_Id)
+    `To` date  NOT NULL,
+    Desk int  NOT NULL,
+    User_Email varchar(40)  NOT NULL,
+    CONSTRAINT Reservation_pk PRIMARY KEY (Id)
 );
 
--- Table: Users
-CREATE TABLE Users (
-    Id INT NOT NULL AUTO_INCREMENT,
+-- Table: User
+CREATE TABLE User (
+    Email varchar(40)  NOT NULL,
     Name varchar(40)  NOT NULL,
     Surname varchar(40)  NOT NULL,
-    CONSTRAINT Users_pk PRIMARY KEY (Id)
+    Password varchar(50)  NOT NULL,
+    CONSTRAINT User_pk PRIMARY KEY (Email)
 );
 
 -- foreign keys
--- Reference: _Desks (table: Reservations)
-ALTER TABLE Reservations ADD CONSTRAINT _Desks FOREIGN KEY _Desks (Desk_Id)
-    REFERENCES Desks (Id);
+-- Reference: Reservation_Desk (table: Reservation)
+ALTER TABLE Reservation ADD CONSTRAINT Reservation_Desk FOREIGN KEY Reservation_Desk (Desk)
+    REFERENCES Desk (Id);
 
--- Reference: _Users (table: Reservations)
-ALTER TABLE Reservations ADD CONSTRAINT _Users FOREIGN KEY _Users (User_Id)
-    REFERENCES Users (Id);
+-- Reference: Reservation_User (table: Reservation)
+ALTER TABLE Reservation ADD CONSTRAINT Reservation_User FOREIGN KEY Reservation_User (User_Email)
+    REFERENCES User (Email);
 
+-- End of file.
 
 
 -- DROP
 
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2025-01-14 14:30:24.806
+-- Last modification date: 2025-01-27 14:57:53.06
 
 -- foreign keys
-ALTER TABLE Reservations
-    DROP FOREIGN KEY _Desks;
+ALTER TABLE Reservation
+    DROP FOREIGN KEY Reservation_Desk;
 
-ALTER TABLE Reservations
-    DROP FOREIGN KEY _Users;
+ALTER TABLE Reservation
+    DROP FOREIGN KEY Reservation_User;
 
 -- tables
-DROP TABLE Desks;
+DROP TABLE Desk;
 
-DROP TABLE Reservations;
+DROP TABLE Reservation;
 
-DROP TABLE Users;
+DROP TABLE User;
 
 -- End of file.
 

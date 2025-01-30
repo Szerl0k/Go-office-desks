@@ -143,17 +143,19 @@ func CreateDesk(c *fiber.Ctx) error {
 		return errorResponse(c, errors.New("desk floor and body is required"))
 	}
 
-	query := "INSERT INTO " + tDesk + " (Floor, Occupied, Body) VALUES (?,?,?)"
+	query := "INSERT INTO " + tDesk + " (Id, Floor, Occupied, Body) VALUES (?,?,?,?)"
 
-	result, err := db.Exec(query, &desk.Floor, false, &desk.Body)
+	result, err := db.Exec(query, &desk.ID, &desk.Floor, false, &desk.Body)
 
 	if err != nil {
+		log.Printf("%v", err)
+
+		if result == nil {
+			return errorResponse(c, errors.New("desk with id "+strconv.Itoa(desk.ID)+" already exists"))
+		}
+
 		return errorResponse(c, errors.New("desk can't be created"))
 	}
-
-	id, _ := result.LastInsertId() // LAST_INSERT_ID() will never return a sql error
-
-	desk.ID = int(id)
 
 	return c.Status(200).JSON(fiber.Map{
 		"error": false,
@@ -189,7 +191,7 @@ func DeleteDesk(c *fiber.Ctx) error {
 
 	return c.Status(200).JSON(fiber.Map{
 		"error": false,
-		"msg":   "successfully removed a desk",
+		"msg":   "successfully deleted desk",
 		"id":    iid,
 	})
 

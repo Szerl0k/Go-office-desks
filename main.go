@@ -1,10 +1,8 @@
 package main
 
 import (
-	"github.com/Szerl0k/go-office-desks/pkg/middleware"
 	"github.com/Szerl0k/go-office-desks/pkg/routes"
 	_ "github.com/go-sql-driver/mysql"
-	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"log"
@@ -33,12 +31,9 @@ func main() {
 
 	routes.PublicRoutes(app)
 
-	app.Use(jwtware.New(jwtware.Config{
-		SigningKey:   jwtware.SigningKey{Key: []byte(middleware.GetJWTSecret())},
-		ErrorHandler: middleware.JWTError,
-	}))
-
 	routes.PrivateRoutes(app)
+
+	routes.RouteNotFound(app)
 
 	log.Fatal(app.Listen(":" + port))
 

@@ -8,8 +8,6 @@ import (
 func PublicRoutes(a *fiber.App) {
 	route := a.Group("/api/v1")
 
-	route.Get("/desks/", controllers.FetchAllDesks) // get desks
-
 	route.Post("/login", controllers.Login)
 
 }

@@ -1,6 +1,6 @@
 UPDATE Desk SET Occupied = false WHERE true;
 
-INSERT INTO User (Email, Name, Surname, Password) VALUES ('test@gmail.com', 'imie', 'nazwisko', 'aabb');
+INSERT INTO User (Email, Name, Surname, Password, Role) VALUES ('test@gmail.com', 'imie', 'nazwisko', '$2a$10$Alh89NdVkHJfV1l/0DzTxOJa4604BL3CSO43lZrcR1SJOlYheHqmu', 'admin');
 
 SELECT * FROM Desk;
 
@@ -39,7 +39,8 @@ CREATE TABLE User (
     Email varchar(40)  NOT NULL,
     Name varchar(40)  NOT NULL,
     Surname varchar(40)  NOT NULL,
-    Password varchar(50)  NOT NULL,
+    Password char(60)  NOT NULL,
+    Role varchar(40) NOT NULL,
     CONSTRAINT User_pk PRIMARY KEY (Email)
 );
 
